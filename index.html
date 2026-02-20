@@ -121,6 +121,75 @@
         animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
       }
 
+      .projects {
+        margin-top: 3.5rem;
+        opacity: 0;
+        transform: translateY(16px);
+        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
+        pointer-events: auto;
+      }
+
+      .card {
+        display: block;
+        text-decoration: none;
+        color: var(--text);
+        padding: 1.5rem 2rem;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        transition: background 0.35s ease, border-color 0.35s ease,
+          transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+          box-shadow 0.35s ease;
+        max-width: 340px;
+      }
+
+      .card:hover {
+        background: rgba(255, 255, 255, 0.055);
+        border-color: rgba(167, 139, 250, 0.18);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(107, 138, 253, 0.08);
+      }
+
+      .card-label {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        font-size: 0.65rem;
+        font-weight: 500;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        color: rgba(167, 139, 250, 0.5);
+        margin-bottom: 0.6rem;
+      }
+
+      .card-title {
+        font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
+          "Book Antiqua", Georgia, serif;
+        font-size: 1.4rem;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+        margin-bottom: 0.45rem;
+      }
+
+      .card-desc {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        color: rgba(232, 234, 240, 0.4);
+      }
+
+      .card-arrow {
+        display: inline-block;
+        margin-left: 0.15em;
+        transition: transform 0.3s ease;
+      }
+
+      .card:hover .card-arrow {
+        transform: translateX(3px);
+      }
+
       .contact {
         position: fixed;
         bottom: 2rem;
@@ -169,6 +238,7 @@
         }
         .name,
         .tagline,
+        .projects,
         .contact {
           opacity: 1;
           transform: none;
@@ -199,6 +269,13 @@
       <div class="content" id="content">
         <h1 class="name">DevCo</h1>
         <p class="tagline">Software, engineered.</p>
+        <div class="projects">
+          <a href="https://caddy.website" class="card">
+            <div class="card-label">Project</div>
+            <div class="card-title">Caddy <span class="card-arrow">&rarr;</span></div>
+            <div class="card-desc">AI-powered organizational app that keeps your work and ideas structured.</div>
+          </a>
+        </div>
       </div>
     </div>
     <div class="contact">
