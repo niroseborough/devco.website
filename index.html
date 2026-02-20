@@ -3,8 +3,12 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="DevCo" />
+    <meta name="description" content="DevCo — Software, engineered." />
     <title>DevCo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23e8eaf0'/><stop offset='100%25' stop-color='%23a78bfa'/></linearGradient></defs><text x='4' y='26' font-size='28' font-weight='700' font-family='Georgia,serif' fill='url(%23g)'>D</text></svg>"
+    />
     <style>
       :root {
         --bg: #08080f;
@@ -33,6 +37,18 @@
         position: fixed;
         inset: 0;
         z-index: 0;
+      }
+
+      /* Noise texture overlay */
+      .noise {
+        position: fixed;
+        inset: 0;
+        z-index: 3;
+        pointer-events: none;
+        opacity: 0.035;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        background-repeat: repeat;
+        background-size: 200px 200px;
       }
 
       .glow {
@@ -69,6 +85,7 @@
         text-align: center;
       }
 
+      /* Load animations */
       .name {
         font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
           "Book Antiqua", Georgia, serif;
@@ -85,6 +102,61 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        opacity: 0;
+        transform: translateY(24px);
+        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+      }
+
+      .tagline {
+        margin-top: 1.2rem;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        font-size: clamp(0.85rem, 2vw, 1.15rem);
+        font-weight: 400;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: rgba(232, 234, 240, 0.35);
+        opacity: 0;
+        transform: translateY(16px);
+        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
+      }
+
+      .contact {
+        position: fixed;
+        bottom: 2rem;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 4;
+        pointer-events: auto;
+        opacity: 0;
+        animation: fadeIn 0.8s ease 1s forwards;
+      }
+
+      .contact a {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Helvetica, Arial, sans-serif;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        color: rgba(232, 234, 240, 0.3);
+        text-decoration: none;
+        transition: color 0.3s ease;
+      }
+
+      .contact a:hover {
+        color: rgba(167, 139, 250, 0.8);
+      }
+
+      @keyframes fadeUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeIn {
+        to {
+          opacity: 1;
+        }
       }
 
       @media (prefers-reduced-motion: reduce) {
@@ -95,11 +167,22 @@
         .content {
           transform: none !important;
         }
+        .name,
+        .tagline,
+        .contact {
+          opacity: 1;
+          transform: none;
+          animation: none;
+        }
       }
 
       @media (max-width: 640px) {
         .name {
           font-size: clamp(3.5rem, 20vw, 6rem);
+        }
+        .tagline {
+          font-size: 0.75rem;
+          letter-spacing: 0.1em;
         }
         .glow {
           width: 400px;
@@ -110,11 +193,16 @@
   </head>
   <body>
     <canvas id="grid"></canvas>
+    <div class="noise" aria-hidden="true"></div>
     <div class="glow" id="glow"></div>
     <div class="page">
       <div class="content" id="content">
         <h1 class="name">DevCo</h1>
+        <p class="tagline">Software, engineered.</p>
       </div>
+    </div>
+    <div class="contact">
+      <a href="mailto:contact@devco.website">contact@devco.website</a>
     </div>
     <script>
       (function () {
@@ -123,8 +211,9 @@
         var glowEl = document.getElementById("glow");
         var contentEl = document.getElementById("content");
 
+        var dpr = window.devicePixelRatio || 1;
         var spacing = 34;
-        var baseRadius = 1;
+        var baseRadius = 1 * dpr;
         var influenceRadius = 200;
         var lineMaxDist = 75;
 
@@ -133,9 +222,19 @@
         var mouse = { x: -1000, y: -1000 };
         var smooth = { x: -1000, y: -1000 };
 
+        // Canvas fade-in
+        var canvasOpacity = 0;
+
         function resize() {
-          width = canvas.width = window.innerWidth;
-          height = canvas.height = window.innerHeight;
+          dpr = window.devicePixelRatio || 1;
+          width = window.innerWidth;
+          height = window.innerHeight;
+          canvas.width = width * dpr;
+          canvas.height = height * dpr;
+          canvas.style.width = width + "px";
+          canvas.style.height = height + "px";
+          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+          baseRadius = 1;
           buildGrid();
         }
 
@@ -150,7 +249,7 @@
             for (var j = 0; j < rows; j++) {
               var bx = ox + i * spacing;
               var by = oy + j * spacing;
-              dots.push({ x: bx, y: by, bx: bx, by: by });
+              dots.push({ x: bx, y: by, bx: bx, by: by, col: i, row: j });
             }
           }
         }
@@ -161,6 +260,12 @@
 
         function draw() {
           ctx.clearRect(0, 0, width, height);
+
+          // Fade canvas in on load
+          if (canvasOpacity < 1) {
+            canvasOpacity = Math.min(1, canvasOpacity + 0.012);
+            canvas.style.opacity = canvasOpacity;
+          }
 
           smooth.x = lerp(smooth.x, mouse.x, 0.12);
           smooth.y = lerp(smooth.y, mouse.y, 0.12);
@@ -199,9 +304,30 @@
               r = baseRadius + ease * 2.5;
               alpha = 0.06 + ease * 0.85;
 
-              cr = lerp(255, 110, ease);
-              cg = lerp(255, 155, ease);
-              cb = 255;
+              // Color variation based on angle from cursor
+              var angle = Math.atan2(dy, dx);
+              var norm = (angle + Math.PI) / (2 * Math.PI); // 0–1
+
+              // Blend between blue, teal, and purple based on angle
+              if (norm < 0.33) {
+                // Blue to teal
+                var p = norm / 0.33;
+                cr = lerp(110, 80, p * ease);
+                cg = lerp(155, 210, p * ease);
+                cb = lerp(255, 220, p * ease);
+              } else if (norm < 0.66) {
+                // Teal to purple
+                var p = (norm - 0.33) / 0.33;
+                cr = lerp(80, 167, p * ease);
+                cg = lerp(210, 139, p * ease);
+                cb = lerp(220, 250, p * ease);
+              } else {
+                // Purple to blue
+                var p = (norm - 0.66) / 0.34;
+                cr = lerp(167, 110, p * ease);
+                cg = lerp(139, 155, p * ease);
+                cb = lerp(250, 255, p * ease);
+              }
 
               if (ease > 0.03) {
                 active.push(d);
@@ -241,7 +367,7 @@
                   ctx.beginPath();
                   ctx.moveTo(a.x, a.y);
                   ctx.lineTo(b.x, b.y);
-                  ctx.strokeStyle = "rgba(120,160,255," + lt * 0.2 + ")";
+                  ctx.strokeStyle = "rgba(140,170,255," + lt * 0.18 + ")";
                   ctx.stroke();
                 }
               }
@@ -277,6 +403,7 @@
           mouse.y = -1000;
         });
 
+        canvas.style.opacity = 0;
         resize();
         draw();
       })();
