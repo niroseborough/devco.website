@@ -33,6 +33,7 @@
         position: absolute;
         inset: 0;
         pointer-events: none;
+        z-index: 0;
         background:
           radial-gradient(42vw 42vw at 10% 18%, rgba(255, 221, 229, 0.55), transparent 58%),
           radial-gradient(36vw 36vw at 86% 16%, rgba(222, 240, 255, 0.62), transparent 60%),
@@ -54,6 +55,8 @@
       .name {
         margin: 0;
         padding: 0 1rem;
+        position: relative;
+        z-index: 1;
         font-family:
           "Iowan Old Style",
           "Palatino Linotype",
