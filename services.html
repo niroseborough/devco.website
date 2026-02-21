@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="DevCo Services — Product design and engineering for the AI era." />
+    <title>Services — DevCo</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23e8eaf0'/><stop offset='100%25' stop-color='%23a78bfa'/></linearGradient></defs><text x='4' y='26' font-size='28' font-weight='700' font-family='Georgia,serif' fill='url(%23g)'>D</text></svg>"
+    />
+    <link rel="stylesheet" href="css/shared.css" />
+  </head>
+  <body>
+    <div class="noise" aria-hidden="true"></div>
+
+    <!-- Nav -->
+    <nav class="nav">
+      <a href="/" class="nav-logo">DevCo</a>
+      <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+      <div class="nav-links">
+        <a href="/" class="nav-link">Home</a>
+        <a href="/about.html" class="nav-link">About</a>
+        <a href="/projects.html" class="nav-link">Projects</a>
+        <a href="/services.html" class="nav-link active">Services</a>
+        <a href="/contact.html" class="nav-link">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Header -->
+    <section class="page-section page-header">
+      <div class="page-container">
+        <h1 class="section-title">What We Do</h1>
+        <p class="section-subtitle">Product design and engineering for the AI era.</p>
+      </div>
+    </section>
+
+    <!-- Capabilities -->
+    <section class="page-section section-bg">
+      <div class="page-container">
+        <p class="section-label">Capabilities</p>
+        <div class="grid-2" style="margin-top:1.5rem;">
+          <div class="value-card">
+            <div class="value-card-title">Product Design</div>
+            <div class="value-card-desc">End-to-end product design from research and wireframes through high-fidelity UI and interaction design.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-card-title">Software Engineering</div>
+            <div class="value-card-desc">Full-stack development with modern tools and frameworks. Clean architecture, tested code, reliable deployments.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-card-title">AI Integration</div>
+            <div class="value-card-desc">Native AI capabilities built into products — from LLM-powered features to intelligent automation and data pipelines.</div>
+          </div>
+          <div class="value-card">
+            <div class="value-card-title">Product Strategy</div>
+            <div class="value-card-desc">From concept validation to roadmap planning. We help define what to build, why it matters, and how to ship it.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Approach -->
+    <section class="page-section section-bg">
+      <div class="page-container">
+        <p class="section-label">Approach</p>
+        <h2 class="section-title">How we work</h2>
+        <div class="prose" style="margin-top:1rem;">
+          <p>We operate as a focused studio, not an agency. Every project gets our full attention — we don't juggle dozens of clients. This means tighter feedback loops, higher quality, and software that ships on time.</p>
+          <p>Our process is lean: understand the problem, prototype quickly, build with care, and iterate based on real usage. We treat every engagement as if we're building our own product.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="page-section section-bg cta-section">
+      <div class="page-container">
+        <h2 class="cta-title">Want to work together?</h2>
+        <a href="/contact.html" class="cta-btn">Get in touch</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <span class="footer-brand">DevCo</span>
+        <span class="footer-email"><a href="mailto:contact@devco.website">contact@devco.website</a></span>
+        <span class="footer-copy">&copy; 2025 DevCo</span>
+      </div>
+    </footer>
+
+    <script src="js/grid.js"></script>
+    <script>
+      document.querySelector('.nav-toggle').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('open');
+      });
+    </script>
+  </body>
+</html>

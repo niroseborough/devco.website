@@ -9,483 +9,93 @@
       rel="icon"
       href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23e8eaf0'/><stop offset='100%25' stop-color='%23a78bfa'/></linearGradient></defs><text x='4' y='26' font-size='28' font-weight='700' font-family='Georgia,serif' fill='url(%23g)'>D</text></svg>"
     />
-    <style>
-      :root {
-        --bg: #08080f;
-        --text: #e8eaf0;
-      }
-
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-      }
-
-      html,
-      body {
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-      }
-
-      body {
-        background: var(--bg);
-        color: var(--text);
-      }
-
-      canvas {
-        position: fixed;
-        inset: 0;
-        z-index: 0;
-      }
-
-      /* Noise texture overlay */
-      .noise {
-        position: fixed;
-        inset: 0;
-        z-index: 3;
-        pointer-events: none;
-        opacity: 0.035;
-        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        background-repeat: repeat;
-        background-size: 200px 200px;
-      }
-
-      .glow {
-        position: fixed;
-        width: 700px;
-        height: 700px;
-        border-radius: 50%;
-        background: radial-gradient(
-          circle,
-          rgba(107, 138, 253, 0.15) 0%,
-          rgba(167, 139, 250, 0.07) 35%,
-          transparent 65%
-        );
-        transform: translate(-50%, -50%);
-        pointer-events: none;
-        z-index: 1;
-        filter: blur(30px);
-        left: -1000px;
-        top: -1000px;
-      }
-
-      .page {
-        position: relative;
-        z-index: 2;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-        pointer-events: none;
-      }
-
-      .content {
-        text-align: center;
-      }
-
-      /* Load animations */
-      .name {
-        font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
-          "Book Antiqua", Georgia, serif;
-        font-size: clamp(5rem, 15vw, 13rem);
-        font-weight: 700;
-        letter-spacing: -0.035em;
-        line-height: 0.9;
-        background: linear-gradient(
-          135deg,
-          #f0f0f5 0%,
-          #c4d0f5 45%,
-          #a78bfa 100%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-        opacity: 0;
-        transform: translateY(24px);
-        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
-      }
-
-      .tagline {
-        margin-top: 1.2rem;
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        font-size: clamp(0.85rem, 2vw, 1.15rem);
-        font-weight: 400;
-        letter-spacing: 0.12em;
-        text-transform: uppercase;
-        color: rgba(232, 234, 240, 0.35);
-        opacity: 0;
-        transform: translateY(16px);
-        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-      }
-
-      .projects {
-        margin-top: 3.5rem;
-        display: flex;
-        justify-content: center;
-        opacity: 0;
-        transform: translateY(16px);
-        animation: fadeUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.8s forwards;
-        pointer-events: auto;
-      }
-
-      .card {
-        display: block;
-        text-decoration: none;
-        color: var(--text);
-        padding: 1.5rem 2rem;
-        border-radius: 14px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.06);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        transition: background 0.35s ease, border-color 0.35s ease,
-          transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-          box-shadow 0.35s ease;
-        max-width: 340px;
-      }
-
-      .card:hover {
-        background: rgba(255, 255, 255, 0.055);
-        border-color: rgba(167, 139, 250, 0.18);
-        transform: translateY(-2px);
-        box-shadow: 0 8px 32px rgba(107, 138, 253, 0.08);
-      }
-
-      .card-label {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        font-size: 0.65rem;
-        font-weight: 500;
-        letter-spacing: 0.1em;
-        text-transform: uppercase;
-        color: rgba(167, 139, 250, 0.5);
-        margin-bottom: 0.6rem;
-      }
-
-      .card-title {
-        font-family: "Iowan Old Style", "Palatino Linotype", Palatino,
-          "Book Antiqua", Georgia, serif;
-        font-size: 1.4rem;
-        font-weight: 600;
-        letter-spacing: -0.01em;
-        margin-bottom: 0.45rem;
-      }
-
-      .card-desc {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        font-size: 0.85rem;
-        line-height: 1.5;
-        color: rgba(232, 234, 240, 0.4);
-      }
-
-      .card-arrow {
-        display: inline-block;
-        margin-left: 0.15em;
-        transition: transform 0.3s ease;
-      }
-
-      .card:hover .card-arrow {
-        transform: translateX(3px);
-      }
-
-      .contact {
-        position: fixed;
-        bottom: 2rem;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 4;
-        pointer-events: auto;
-        opacity: 0;
-        animation: fadeIn 0.8s ease 1s forwards;
-      }
-
-      .contact a {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Helvetica, Arial, sans-serif;
-        font-size: 0.8rem;
-        letter-spacing: 0.08em;
-        color: rgba(232, 234, 240, 0.3);
-        text-decoration: none;
-        transition: color 0.3s ease;
-      }
-
-      .contact a:hover {
-        color: rgba(167, 139, 250, 0.8);
-      }
-
-      @keyframes fadeUp {
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      @keyframes fadeIn {
-        to {
-          opacity: 1;
-        }
-      }
-
-      @media (prefers-reduced-motion: reduce) {
-        .glow,
-        canvas {
-          display: none;
-        }
-        .content {
-          transform: none !important;
-        }
-        .name,
-        .tagline,
-        .projects,
-        .contact {
-          opacity: 1;
-          transform: none;
-          animation: none;
-        }
-      }
-
-      @media (max-width: 640px) {
-        .name {
-          font-size: clamp(3.5rem, 20vw, 6rem);
-        }
-        .tagline {
-          font-size: 0.75rem;
-          letter-spacing: 0.1em;
-        }
-        .glow {
-          width: 400px;
-          height: 400px;
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/shared.css" />
   </head>
   <body>
     <canvas id="grid"></canvas>
     <div class="noise" aria-hidden="true"></div>
     <div class="glow" id="glow"></div>
-    <div class="page">
+
+    <!-- Nav -->
+    <nav class="nav">
+      <a href="/" class="nav-logo">DevCo</a>
+      <button class="nav-toggle" aria-label="Menu">&#9776;</button>
+      <div class="nav-links">
+        <a href="/" class="nav-link active">Home</a>
+        <a href="/about.html" class="nav-link">About</a>
+        <a href="/projects.html" class="nav-link">Projects</a>
+        <a href="/services.html" class="nav-link">Services</a>
+        <a href="/contact.html" class="nav-link">Contact</a>
+      </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
       <div class="content" id="content">
         <h1 class="name">DevCo</h1>
         <p class="tagline">Software, engineered.</p>
-        <div class="projects">
-          <a href="https://caddy.website" class="card">
-            <div class="card-label">Project</div>
-            <div class="card-title">Caddy <span class="card-arrow">&rarr;</span></div>
-            <div class="card-desc">AI-powered organizational app that keeps your work and ideas structured.</div>
-          </a>
-        </div>
       </div>
-    </div>
-    <div class="contact">
-      <a href="mailto:contact@devco.website">contact@devco.website</a>
-    </div>
+      <div class="scroll-hint">
+        <a href="#about-section" aria-label="Scroll down">&#8964;</a>
+      </div>
+    </section>
+
+    <!-- About blurb -->
+    <section id="about-section" class="page-section section-bg">
+      <div class="page-container">
+        <p class="section-label">About</p>
+        <h2 class="section-title">We build products.</h2>
+        <div class="prose">
+          <p>DevCo is a software studio focused on designing and engineering products that solve real problems. We combine rigorous engineering with thoughtful design to ship software that people actually want to use.</p>
+          <p>We work at the intersection of product thinking and technical craft, building tools powered by AI that feel intuitive and dependable.</p>
+        </div>
+        <a href="/about.html" class="link-arrow">Learn more &rarr;</a>
+      </div>
+    </section>
+
+    <!-- Featured projects -->
+    <section class="page-section section-bg">
+      <div class="page-container">
+        <p class="section-label">Projects</p>
+        <h2 class="section-title">What we've shipped</h2>
+        <div style="display:flex;flex-direction:column;gap:1.5rem;margin-top:2rem;">
+          <a href="https://caddy.website" class="card card-full">
+            <div class="card-label">Live</div>
+            <div class="card-title">Caddy <span class="card-arrow">&rarr;</span></div>
+            <div class="card-desc">AI-powered organizational app that keeps your work and ideas structured. Designed and built from scratch at DevCo.</div>
+          </a>
+          <div class="card card-full card-muted">
+            <div class="card-label">Coming soon</div>
+            <div class="card-title">More on the way</div>
+            <div class="card-desc">New products are in development. Stay tuned.</div>
+          </div>
+        </div>
+        <a href="/projects.html" class="link-arrow">See all projects &rarr;</a>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="page-section section-bg cta-section">
+      <div class="page-container">
+        <h2 class="cta-title">Have an idea? Let's talk.</h2>
+        <a href="/contact.html" class="cta-btn">Get in touch</a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-inner">
+        <span class="footer-brand">DevCo</span>
+        <span class="footer-email"><a href="mailto:contact@devco.website">contact@devco.website</a></span>
+        <span class="footer-copy">&copy; 2025 DevCo</span>
+      </div>
+    </footer>
+
+    <script src="js/grid.js"></script>
     <script>
-      (function () {
-        var canvas = document.getElementById("grid");
-        var ctx = canvas.getContext("2d");
-        var glowEl = document.getElementById("glow");
-        var contentEl = document.getElementById("content");
-
-        var dpr = window.devicePixelRatio || 1;
-        var spacing = 34;
-        var baseRadius = 1 * dpr;
-        var influenceRadius = 200;
-        var lineMaxDist = 75;
-
-        var width, height;
-        var dots = [];
-        var mouse = { x: -1000, y: -1000 };
-        var smooth = { x: -1000, y: -1000 };
-
-        // Canvas fade-in
-        var canvasOpacity = 0;
-
-        function resize() {
-          dpr = window.devicePixelRatio || 1;
-          width = window.innerWidth;
-          height = window.innerHeight;
-          canvas.width = width * dpr;
-          canvas.height = height * dpr;
-          canvas.style.width = width + "px";
-          canvas.style.height = height + "px";
-          ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-          baseRadius = 1;
-          buildGrid();
-        }
-
-        function buildGrid() {
-          dots = [];
-          var cols = Math.ceil(width / spacing) + 2;
-          var rows = Math.ceil(height / spacing) + 2;
-          var ox = (width - (cols - 1) * spacing) / 2;
-          var oy = (height - (rows - 1) * spacing) / 2;
-
-          for (var i = 0; i < cols; i++) {
-            for (var j = 0; j < rows; j++) {
-              var bx = ox + i * spacing;
-              var by = oy + j * spacing;
-              dots.push({ x: bx, y: by, bx: bx, by: by, col: i, row: j });
-            }
-          }
-        }
-
-        function lerp(a, b, t) {
-          return a + (b - a) * t;
-        }
-
-        function draw() {
-          ctx.clearRect(0, 0, width, height);
-
-          // Fade canvas in on load
-          if (canvasOpacity < 1) {
-            canvasOpacity = Math.min(1, canvasOpacity + 0.012);
-            canvas.style.opacity = canvasOpacity;
-          }
-
-          smooth.x = lerp(smooth.x, mouse.x, 0.12);
-          smooth.y = lerp(smooth.y, mouse.y, 0.12);
-
-          glowEl.style.left = smooth.x + "px";
-          glowEl.style.top = smooth.y + "px";
-
-          var cx = (smooth.x - width * 0.5) / width;
-          var cy = (smooth.y - height * 0.5) / height;
-          contentEl.style.transform =
-            "translate(" + cx * -14 + "px," + cy * -14 + "px)";
-
-          var active = [];
-
-          for (var k = 0; k < dots.length; k++) {
-            var d = dots[k];
-            var dx = smooth.x - d.bx;
-            var dy = smooth.y - d.by;
-            var dist = Math.sqrt(dx * dx + dy * dy);
-
-            var r = baseRadius;
-            var alpha = 0.06;
-            var cr = 255,
-              cg = 255,
-              cb = 255;
-
-            if (dist < influenceRadius) {
-              var t = 1 - dist / influenceRadius;
-              var ease = t * t * t;
-
-              var tx = d.bx + dx * ease * 0.1;
-              var ty = d.by + dy * ease * 0.1;
-              d.x = lerp(d.x, tx, 0.1);
-              d.y = lerp(d.y, ty, 0.1);
-
-              r = baseRadius + ease * 2.5;
-              alpha = 0.06 + ease * 0.85;
-
-              // Color variation based on angle from cursor
-              var angle = Math.atan2(dy, dx);
-              var norm = (angle + Math.PI) / (2 * Math.PI); // 0–1
-
-              // Blend between blue, teal, and purple based on angle
-              if (norm < 0.33) {
-                // Blue to teal
-                var p = norm / 0.33;
-                cr = lerp(110, 80, p * ease);
-                cg = lerp(155, 210, p * ease);
-                cb = lerp(255, 220, p * ease);
-              } else if (norm < 0.66) {
-                // Teal to purple
-                var p = (norm - 0.33) / 0.33;
-                cr = lerp(80, 167, p * ease);
-                cg = lerp(210, 139, p * ease);
-                cb = lerp(220, 250, p * ease);
-              } else {
-                // Purple to blue
-                var p = (norm - 0.66) / 0.34;
-                cr = lerp(167, 110, p * ease);
-                cg = lerp(139, 155, p * ease);
-                cb = lerp(250, 255, p * ease);
-              }
-
-              if (ease > 0.03) {
-                active.push(d);
-              }
-            } else {
-              d.x = lerp(d.x, d.bx, 0.06);
-              d.y = lerp(d.y, d.by, 0.06);
-            }
-
-            ctx.beginPath();
-            ctx.arc(d.x, d.y, r, 0, 6.2832);
-            ctx.fillStyle =
-              "rgba(" +
-              (cr | 0) +
-              "," +
-              (cg | 0) +
-              "," +
-              (cb | 0) +
-              "," +
-              alpha +
-              ")";
-            ctx.fill();
-          }
-
-          if (active.length > 1) {
-            ctx.lineWidth = 0.5;
-            for (var i = 0; i < active.length; i++) {
-              for (var j = i + 1; j < active.length; j++) {
-                var a = active[i];
-                var b = active[j];
-                var lx = a.x - b.x;
-                var ly = a.y - b.y;
-                var ld = Math.sqrt(lx * lx + ly * ly);
-
-                if (ld < lineMaxDist) {
-                  var lt = 1 - ld / lineMaxDist;
-                  ctx.beginPath();
-                  ctx.moveTo(a.x, a.y);
-                  ctx.lineTo(b.x, b.y);
-                  ctx.strokeStyle = "rgba(140,170,255," + lt * 0.18 + ")";
-                  ctx.stroke();
-                }
-              }
-            }
-          }
-
-          requestAnimationFrame(draw);
-        }
-
-        window.addEventListener("resize", resize);
-
-        document.addEventListener("mousemove", function (e) {
-          mouse.x = e.clientX;
-          mouse.y = e.clientY;
-        });
-
-        document.addEventListener("mouseleave", function () {
-          mouse.x = -1000;
-          mouse.y = -1000;
-        });
-
-        document.addEventListener(
-          "touchmove",
-          function (e) {
-            mouse.x = e.touches[0].clientX;
-            mouse.y = e.touches[0].clientY;
-          },
-          { passive: true }
-        );
-
-        document.addEventListener("touchend", function () {
-          mouse.x = -1000;
-          mouse.y = -1000;
-        });
-
-        canvas.style.opacity = 0;
-        resize();
-        draw();
-      })();
+      document.querySelector('.nav-toggle').addEventListener('click', function () {
+        document.querySelector('.nav-links').classList.toggle('open');
+      });
     </script>
   </body>
 </html>
