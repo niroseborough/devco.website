@@ -3,99 +3,2475 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="DevCo — Software, engineered." />
-    <title>DevCo</title>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0%25' stop-color='%23e8eaf0'/><stop offset='100%25' stop-color='%23a78bfa'/></linearGradient></defs><text x='4' y='26' font-size='28' font-weight='700' font-family='Georgia,serif' fill='url(%23g)'>D</text></svg>"
-    />
-    <link rel="stylesheet" href="css/shared.css" />
+    <title>DevCo — Software, engineered.</title>
+    <meta name="description" content="DevCo is a software studio building AI-native products with engineering rigor and a bias toward shipping." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23f4efe3'/%3E%3Cg fill='none' stroke='%232a2724' stroke-width='1.4' stroke-linecap='round'%3E%3Ccircle cx='16' cy='7' r='2.2'/%3E%3Cline x1='16' y1='9.2' x2='8' y2='25'/%3E%3Cline x1='16' y1='9.2' x2='24' y2='25'/%3E%3Cpath d='M10.5 20 A 7 7 0 0 0 21.5 20'/%3E%3C/g%3E%3C/svg%3E" />
+    <style>
+/* ===== DevCo redesign — charcoal & cream ===== */
+
+:root {
+  /* Palette */
+  --cream: oklch(0.962 0.015 82);
+  --cream-2: oklch(0.945 0.018 82);
+  --cream-3: oklch(0.92 0.02 82);
+  --charcoal: oklch(0.22 0.008 60);
+  --charcoal-2: oklch(0.32 0.008 60);
+  --charcoal-3: oklch(0.48 0.01 60);
+  --charcoal-4: oklch(0.68 0.012 60);
+  --rule: oklch(0.22 0.008 60 / 0.14);
+  --rule-strong: oklch(0.22 0.008 60 / 0.32);
+  --accent: oklch(0.45 0.06 35); /* warm umber — used very sparingly */
+
+  /* Type */
+  --serif: "Cormorant Garamond", "Iowan Old Style", Palatino, Georgia, serif;
+  --sans: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+  /* Layout */
+  --max: 1180px;
+  --gutter: clamp(1.25rem, 3vw, 2.25rem);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  background: var(--cream);
+  color: var(--charcoal);
+  font-family: var(--sans);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  /* subtle paper warmth */
+  background-image:
+    radial-gradient(ellipse at top, oklch(0.97 0.02 85) 0%, transparent 60%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 300 300' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15  0 0 0 0 0.12  0 0 0 0 0.1  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: auto, 220px 220px;
+}
+
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+img, svg { display: block; max-width: 100%; }
+
+/* ===== Typographic primitives ===== */
+.kicker {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  letter-spacing: -0.018em;
+  line-height: 1.02;
+  color: var(--charcoal);
+}
+.display em { font-style: italic; font-weight: 400; }
+
+.h1 { font-size: clamp(3rem, 8vw, 6.5rem); }
+.h2 { font-size: clamp(2rem, 4.2vw, 3.4rem); }
+.h3 { font-size: clamp(1.4rem, 2.2vw, 1.85rem); }
+
+.lede {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.3rem, 1.6vw, 1.55rem);
+  line-height: 1.45;
+  color: var(--charcoal-2);
+  letter-spacing: -0.005em;
+}
+
+.prose p {
+  font-size: 1.02rem;
+  line-height: 1.7;
+  color: var(--charcoal-2);
+  max-width: 60ch;
+}
+.prose p + p { margin-top: 1rem; }
+
+.mono { font-family: var(--mono); }
+
+/* ===== Shell ===== */
+.shell { min-height: 100vh; display: flex; flex-direction: column; }
+.container {
+  width: 100%;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* ===== Nav ===== */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  background: oklch(0.962 0.015 82 / 0.82);
+  border-bottom: 1px solid var(--rule);
+}
+.nav-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  width: 100%;
+  height: 68px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  position: relative;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+}
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  flex: none;
+}
+.nav-links { display: flex; gap: 0.2rem; }
+.nav-link {
+  position: relative;
+  padding: 0.45rem 0.9rem;
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  transition: color .2s;
+}
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0.9rem; right: 0.9rem;
+  bottom: 0.25rem;
+  height: 1px;
+  background: var(--charcoal);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .3s ease;
+}
+.nav-link:hover { color: var(--charcoal); }
+.nav-link:hover::after { transform: scaleX(1); }
+.nav-link.is-active { color: var(--charcoal); }
+.nav-link.is-active::after { transform: scaleX(1); }
+
+.nav-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--charcoal);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  transition: background .2s, color .2s;
+  white-space: nowrap;
+}
+.nav-cta:hover { background: var(--charcoal); color: var(--cream); }
+.nav-cta-short { display: none; }
+
+/* ===== Hero ===== */
+.hero {
+  position: relative;
+  padding: clamp(4rem, 9vw, 8rem) 0 clamp(3rem, 6vw, 5rem);
+  border-bottom: 1px solid var(--rule);
+  overflow: hidden;
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: end;
+}
+.hero-left { position: relative; }
+.hero-meta {
+  display: flex;
+  gap: 1.25rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  color: var(--charcoal-3);
+}
+.hero-meta .dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: oklch(0.62 0.13 145);
+  box-shadow: 0 0 0 3px oklch(0.62 0.13 145 / 0.18);
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3.2rem, 9vw, 7.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+}
+.hero h1 em {
+  font-style: italic;
+  color: var(--charcoal-2);
+}
+.hero-tag {
+  margin-top: 1.4rem;
+  max-width: 36ch;
+  font-size: 1.05rem;
+  line-height: 1.55;
+  color: var(--charcoal-2);
+}
+
+.hero-right {
+  position: relative;
+  min-height: 340px;
+  align-self: stretch;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+.hero-sketch-wrap {
+  width: 100%;
+  max-width: 420px;
+  aspect-ratio: 1/1;
+}
+
+.hero-footer {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1.3rem;
+  background: var(--charcoal);
+  color: var(--cream);
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: transform .25s ease, background .2s;
+}
+.btn-primary:hover {
+  background: var(--charcoal-2);
+  transform: translateY(-1px);
+}
+.btn-primary svg { transition: transform .25s; }
+.btn-primary:hover svg { transform: translateX(3px); }
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.1rem;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--charcoal);
+  border-radius: 0;
+  transition: padding-right .2s;
+}
+.btn-ghost:hover { padding-right: 1.4rem; }
+
+/* ===== Section ===== */
+.section {
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+}
+.section.alt { background: var(--cream-2); }
+.section-head {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: clamp(1.5rem, 3vw, 3rem);
+  align-items: start;
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
+}
+.section-head .kicker-col { padding-top: 0.5rem; }
+.section-head h2 {
+  font-family: var(--serif);
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  max-width: 22ch;
+}
+.section-head h2 em { font-style: italic; color: var(--charcoal-2); }
+
+/* ===== Work list ===== */
+.work-list { border-top: 1px solid var(--rule); }
+.work-row {
+  display: grid;
+  grid-template-columns: 80px 1.3fr 2fr 1fr 40px;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1.75rem 0.25rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--charcoal);
+  transition: padding .25s ease, background .25s ease;
+  position: relative;
+}
+.work-row:hover {
+  padding-left: 1rem;
+  background: oklch(0.22 0.008 60 / 0.025);
+}
+.work-row .idx {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--charcoal-3);
+}
+.work-row .title {
+  font-family: var(--serif);
+  font-size: clamp(1.5rem, 2.4vw, 2.15rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+.work-row .desc {
+  font-size: 0.92rem;
+  color: var(--charcoal-3);
+  max-width: 44ch;
+  line-height: 1.55;
+}
+.work-row .status {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  display: flex; align-items: center; gap: 0.5rem;
+}
+.work-row .status .pip {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--charcoal-4);
+}
+.work-row.live .status .pip { background: oklch(0.62 0.13 145); }
+.work-row .arrow {
+  justify-self: end;
+  color: var(--charcoal-3);
+  transition: transform .25s, color .25s;
+}
+.work-row:hover .arrow { transform: translateX(4px); color: var(--charcoal); }
+
+/* ===== Value cards with sketches ===== */
+.values {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+  border-left: 1px solid var(--rule);
+}
+.value {
+  padding: 2rem 1.5rem;
+  border-right: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  background: transparent;
+  transition: background .25s;
+}
+.value:hover { background: oklch(0.22 0.008 60 / 0.02); }
+.value-sketch {
+  width: 68px;
+  height: 68px;
+  color: var(--charcoal-2);
+}
+.value-title {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+.value-desc {
+  font-size: 0.92rem;
+  color: var(--charcoal-3);
+  line-height: 1.6;
+  margin-top: auto;
+}
+.value-num {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--charcoal-3);
+}
+
+/* ===== Feature / split ===== */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: center;
+}
+.split-figure {
+  position: relative;
+  aspect-ratio: 5/4;
+  border: 1px solid var(--rule-strong);
+  background: var(--cream-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.split-figure::before {
+  content: "";
+  position: absolute;
+  inset: 14px;
+  border: 1px dashed var(--rule-strong);
+  pointer-events: none;
+}
+.split-figure svg { width: 72%; height: 72%; }
+.split-caption {
+  position: absolute;
+  bottom: 0.8rem; left: 0.8rem;
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  color: var(--charcoal-3);
+  background: var(--cream);
+  padding: 0.2rem 0.5rem;
+  border: 1px solid var(--rule);
+}
+
+/* ===== Capabilities (services page) ===== */
+.caps {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.cap {
+  padding: 2.5rem 2rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+.cap:nth-child(odd) { border-right: 1px solid var(--rule); padding-left: 0.25rem;}
+.cap:nth-child(even) { padding-right: 0.25rem;}
+.cap-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.cap .cap-sketch { width: 72px; height: 72px; color: var(--charcoal-2); flex: none;}
+.cap-title {
+  font-family: var(--serif);
+  font-size: 1.75rem;
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.1;
+  margin-top: 0.5rem;
+}
+.cap-desc {
+  font-size: 0.98rem;
+  color: var(--charcoal-3);
+  line-height: 1.65;
+  margin-top: 0.6rem;
+  max-width: 42ch;
+}
+.cap-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.5rem;
+  margin-top: auto;
+}
+.cap-tag {
+  font-family: var(--mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+}
+.cap-num {
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  color: var(--charcoal-3);
+  letter-spacing: 0.06em;
+}
+
+/* ===== Process ===== */
+.process {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+.step {
+  position: relative;
+  padding-top: 1.25rem;
+  border-top: 2px solid var(--charcoal);
+}
+.step-num {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  color: var(--charcoal-3);
+}
+.step-title {
+  font-family: var(--serif);
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin-top: 0.5rem;
+}
+.step-desc {
+  margin-top: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--charcoal-3);
+  line-height: 1.6;
+}
+
+/* ===== CTA ===== */
+.cta-band {
+  padding: clamp(4rem, 8vw, 7rem) 0;
+  background: var(--charcoal);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+}
+.cta-band .kicker { color: oklch(0.96 0.015 82 / 0.55); }
+.cta-band h2 {
+  font-family: var(--serif);
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 18ch;
+  margin-top: 0.9rem;
+}
+.cta-band h2 em { font-style: italic; color: oklch(0.96 0.015 82 / 0.75); }
+.cta-band-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+.cta-band .btn-primary {
+  background: var(--cream);
+  color: var(--charcoal);
+}
+.cta-band .btn-primary:hover { background: var(--cream-3); }
+.cta-band-art {
+  position: absolute;
+  right: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 300px;
+  opacity: 0.3;
+  color: var(--cream);
+  pointer-events: none;
+}
+
+/* ===== Footer ===== */
+.footer {
+  padding: clamp(3rem, 5vw, 5rem) 0 2rem;
+  background: var(--cream-2);
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr;
+  gap: 2rem;
+  padding-bottom: 3rem;
+  border-bottom: 1px solid var(--rule);
+}
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+.footer-col a {
+  font-size: 0.95rem;
+  color: var(--charcoal-2);
+  transition: color .2s;
+}
+.footer-col a:hover { color: var(--charcoal); }
+.footer-brand-block p {
+  max-width: 36ch;
+  font-size: 0.92rem;
+  color: var(--charcoal-3);
+  margin-top: 0.75rem;
+  line-height: 1.55;
+}
+.footer-bottom {
+  padding-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+
+/* ===== Inner page header ===== */
+.page-head {
+  padding: clamp(4rem, 8vw, 7rem) 0 clamp(3rem, 5vw, 5rem);
+  border-bottom: 1px solid var(--rule);
+  position: relative;
+  overflow: hidden;
+}
+.page-head-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: end;
+}
+.page-head h1 {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(3rem, 7vw, 6rem);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+.page-head h1 em { font-style: italic; color: var(--charcoal-2); }
+.page-head .sub {
+  font-family: var(--serif);
+  font-size: clamp(1.15rem, 1.6vw, 1.45rem);
+  line-height: 1.5;
+  color: var(--charcoal-2);
+  max-width: 40ch;
+}
+
+/* ===== About — story layout ===== */
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.story-aside .story-label {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  margin-bottom: 1.25rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+.story-aside .story-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem 2rem;
+}
+.stat .k {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.stat .v {
+  font-family: var(--serif);
+  font-size: 1.9rem;
+  font-weight: 400;
+  margin-top: 0.25rem;
+  color: var(--charcoal);
+  line-height: 1;
+}
+.stat .v em { font-style: italic; color: var(--charcoal-2); }
+
+.story-prose p {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  line-height: 1.55;
+  color: var(--charcoal);
+}
+.story-prose p + p { margin-top: 1.2rem; }
+.story-prose p::first-letter {
+  font-family: var(--serif);
+  font-size: 3.5rem;
+  float: left;
+  line-height: 0.85;
+  padding: 0.2rem 0.6rem 0 0;
+}
+.story-prose p + p::first-letter { all: unset; }
+
+/* ===== Projects — case card ===== */
+.case {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--rule-strong);
+  margin-bottom: 2rem;
+  background: var(--cream);
+}
+.case-figure {
+  position: relative;
+  background: var(--cream-2);
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 1px solid var(--rule-strong);
+  overflow: hidden;
+}
+.case-figure svg { width: 68%; height: auto; }
+.case-figure .fig-caption {
+  position: absolute;
+  top: 1rem; left: 1rem;
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.case-figure .fig-corner {
+  position: absolute;
+  width: 14px; height: 14px;
+  border-color: var(--charcoal-3);
+}
+.case-figure .fig-corner.tl { top: 10px; left: 10px; border-top: 1px solid; border-left: 1px solid; }
+.case-figure .fig-corner.tr { top: 10px; right: 10px; border-top: 1px solid; border-right: 1px solid; }
+.case-figure .fig-corner.bl { bottom: 10px; left: 10px; border-bottom: 1px solid; border-left: 1px solid; }
+.case-figure .fig-corner.br { bottom: 10px; right: 10px; border-bottom: 1px solid; border-right: 1px solid; }
+
+.case-body { padding: 2.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.case-meta {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--rule);
+}
+.case-meta .live { color: oklch(0.45 0.12 145); display: flex; align-items: center; gap: 0.4rem;}
+.case-meta .live .pip { width:6px; height:6px; border-radius:50%; background: oklch(0.62 0.13 145);}
+.case-title {
+  font-family: var(--serif);
+  font-size: clamp(1.9rem, 3vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+.case-desc {
+  font-size: 1rem;
+  color: var(--charcoal-2);
+  line-height: 1.65;
+}
+.case-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  padding-top: 1rem;
+  margin-top: 0.5rem;
+  border-top: 1px solid var(--rule);
+}
+.case-specs .k {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.case-specs .v {
+  font-family: var(--serif);
+  font-size: 1.1rem;
+  margin-top: 0.25rem;
+  color: var(--charcoal);
+}
+
+/* ===== Contact ===== */
+.contact {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(2rem, 5vw, 5rem);
+  align-items: start;
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+.field { display: flex; flex-direction: column; gap: 0.35rem; }
+.field label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.field input, .field textarea, .field select {
+  padding: 0.75rem 0;
+  border: none;
+  border-bottom: 1px solid var(--rule-strong);
+  background: transparent;
+  font-family: var(--sans);
+  font-size: 1rem;
+  color: var(--charcoal);
+  outline: none;
+  transition: border-color .2s;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  border-color: var(--charcoal);
+}
+.field textarea { resize: vertical; min-height: 110px; }
+.contact-aside .kicker { margin-bottom: 0.9rem; }
+.contact-email {
+  font-family: var(--serif);
+  font-size: clamp(1.6rem, 3vw, 2.1rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+  color: var(--charcoal);
+  border-bottom: 1px solid var(--charcoal);
+  display: inline-block;
+  padding-bottom: 0.15rem;
+  transition: color .2s;
+}
+.contact-email:hover { color: var(--charcoal-2); }
+.contact-bits {
+  margin-top: 2rem;
+  display: grid;
+  gap: 1.25rem;
+}
+.contact-bit .k {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.contact-bit .v {
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  color: var(--charcoal-2);
+  line-height: 1.55;
+}
+.contact-success {
+  padding: 2rem;
+  border: 1px solid var(--charcoal);
+  background: var(--cream-2);
+  font-family: var(--serif);
+  font-size: 1.3rem;
+}
+
+/* ===== Margin marks ===== */
+.margin-marks {
+  position: absolute;
+  top: 0; bottom: 0; left: 0;
+  width: var(--gutter);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  pointer-events: none;
+  color: var(--charcoal-3);
+  opacity: 0.35;
+}
+.margin-marks .tick {
+  font-family: var(--mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  padding-left: 0.3rem;
+  border-left: 1px solid currentColor;
+  line-height: 1;
+  padding: 0.15rem 0 0.15rem 0.4rem;
+}
+
+/* ===== Tweaks panel ===== */
+.tweaks {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  width: 280px;
+  background: var(--cream);
+  border: 1px solid var(--charcoal);
+  z-index: 200;
+  font-family: var(--sans);
+  box-shadow: 0 18px 48px oklch(0.22 0.008 60 / 0.18);
+}
+.tweaks-head {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+.tweaks-body { padding: 0.75rem 1rem 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+.tweak-row { display: flex; flex-direction: column; gap: 0.4rem; }
+.tweak-row .lbl {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+}
+.tweak-row .opts {
+  display: flex; gap: 0.3rem; flex-wrap: wrap;
+}
+.tweak-row button {
+  padding: 0.35rem 0.6rem;
+  border: 1px solid var(--rule-strong);
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  color: var(--charcoal-2);
+  background: transparent;
+}
+.tweak-row button.active {
+  background: var(--charcoal);
+  color: var(--cream);
+  border-color: var(--charcoal);
+}
+.swatches { display: flex; gap: 0.35rem; }
+.swatch {
+  width: 26px; height: 26px; border-radius: 50%;
+  border: 1px solid var(--rule-strong);
+  cursor: pointer;
+}
+.swatch.active { outline: 2px solid var(--charcoal); outline-offset: 2px; }
+.tweaks-close {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  color: var(--charcoal-3);
+}
+
+/* ===== Accent-driven overrides via tweaks ===== */
+[data-accent="umber"]  { --accent: oklch(0.48 0.08 45); }
+[data-accent="sage"]   { --accent: oklch(0.5 0.05 145); }
+[data-accent="ink"]    { --accent: oklch(0.32 0.03 250); }
+[data-accent="brick"]  { --accent: oklch(0.45 0.09 25); }
+
+[data-pairing="classic"] { --serif: "Cormorant Garamond", Palatino, Georgia, serif; --sans: "Inter Tight", Helvetica, sans-serif; }
+[data-pairing="editorial"] { --serif: "EB Garamond", Georgia, serif; --sans: "IBM Plex Sans", Helvetica, sans-serif; }
+[data-pairing="modern"] { --serif: "Instrument Serif", Georgia, serif; --sans: "Geist", Helvetica, sans-serif; }
+
+[data-sketch="hidden"] .value-sketch,
+[data-sketch="hidden"] .split-figure svg,
+[data-sketch="hidden"] .case-figure svg,
+[data-sketch="hidden"] .cap-sketch,
+[data-sketch="hidden"] .hero-sketch-wrap { display: none; }
+
+[data-marks="off"] .margin-marks { display: none; }
+
+/* ===== Responsive ===== */
+@media (max-width: 900px) {
+  .hero-grid, .page-head-grid, .split, .story, .contact { grid-template-columns: 1fr; }
+  .hero-right { justify-content: flex-start; min-height: 260px; }
+  .section-head { grid-template-columns: 1fr; }
+  .values { grid-template-columns: repeat(2, 1fr); }
+  .caps { grid-template-columns: 1fr; }
+  .cap:nth-child(odd) { border-right: none; padding-right: 0; }
+  .cap:nth-child(even) { padding-left: 0.25rem; }
+  .process { grid-template-columns: repeat(2, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .work-row { grid-template-columns: 40px 1fr 60px; gap: 1rem; }
+  .work-row .desc, .work-row .status { display: none; }
+  .case { grid-template-columns: 1fr; }
+  .case-figure { border-right: none; border-bottom: 1px solid var(--rule-strong); min-height: 260px; }
+  .nav-links { display: none; }
+}
+
+@media (max-width: 560px) {
+  :root { --gutter: 1.15rem; }
+  .nav-inner { gap: 0.75rem; }
+  .brand { font-size: 1.35rem; gap: 0.5rem; }
+  .brand-mark { width: 28px; height: 28px; }
+  .nav-cta {
+    display: inline-flex;
+    position: fixed;
+    right: var(--gutter);
+    top: 17px;
+    padding: 0.48rem 0.72rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.08em;
+    z-index: 60;
+  }
+  .nav-cta-long { display: none; }
+  .nav-cta-short { display: inline; }
+  .hero { padding-top: 3.6rem; }
+  .hero-meta {
+    gap: 0.65rem 0.8rem;
+    margin-bottom: 1.4rem;
+    max-width: min(100%, 19rem);
+    font-size: 0.62rem;
+    letter-spacing: 0.11em;
+  }
+  .hero h1 { font-size: clamp(3.2rem, 18vw, 4.8rem); }
+  .hero-footer { align-items: flex-start; flex-direction: column; }
+  .values, .process, .footer-grid, .case-specs { grid-template-columns: 1fr; }
+  .footer-bottom { align-items: flex-start; flex-direction: column; gap: 0.75rem; }
+  .contact-email {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+}
+
+/* ===== Motion ===== */
+@keyframes drawIn {
+  from { stroke-dashoffset: var(--len, 1000); }
+  to { stroke-dashoffset: 0; }
+}
+.draw-path {
+  stroke-dasharray: var(--len, 1000);
+  animation: drawIn 1.8s cubic-bezier(.65,.05,.3,1) forwards;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp .7s cubic-bezier(.16,1,.3,1) both; }
+.fade-up.d1 { animation-delay: .1s; }
+.fade-up.d2 { animation-delay: .22s; }
+.fade-up.d3 { animation-delay: .34s; }
+.fade-up.d4 { animation-delay: .46s; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+    </style>
+    <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
   </head>
   <body>
-    <canvas id="grid"></canvas>
-    <div class="noise" aria-hidden="true"></div>
-    <div class="glow" id="glow"></div>
+    <div id="root"></div>
+    <script type="text/babel">
+/* Line-sketch primitives. Loose, hand-drawn feel with slight jitter.
+   All stroke via currentColor so they inherit the charcoal tone. */
+(function () {
+  const { useState, useEffect, useMemo } = React;
 
-    <!-- Nav -->
-    <nav class="nav">
-      <a href="/" class="nav-logo">DevCo</a>
-      <button class="nav-toggle" aria-label="Menu">&#9776;</button>
-      <div class="nav-links">
-        <a href="/" class="nav-link active">Home</a>
-        <a href="/about.html" class="nav-link">About</a>
-        <a href="/projects.html" class="nav-link">Projects</a>
-        <a href="/services.html" class="nav-link">Services</a>
-        <a href="/contact.html" class="nav-link">Contact</a>
+  // ---- common stroke props
+  const stroke = {
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: 1.1,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+  };
+
+  // slight path-draw animation wrapper
+  const Drawn = ({ len = 1000, delay = 0, children }) => (
+    <g
+      className="draw-path"
+      style={{ "--len": len, animationDelay: `${delay}s` }}
+    >
+      {children}
+    </g>
+  );
+
+  // ---- Hero: abstract "product + sketch" composition
+  const HeroSketch = () => (
+    <svg viewBox="0 0 400 400" {...stroke} aria-hidden="true">
+      {/* frame */}
+      <Drawn len={1600}>
+        <rect x="40" y="60" width="280" height="200" rx="3" />
+      </Drawn>
+      {/* inner constructions */}
+      <Drawn len={900} delay={0.2}>
+        <line x1="40" y1="110" x2="320" y2="110" />
+        <circle cx="60" cy="85" r="4" />
+        <circle cx="78" cy="85" r="4" />
+        <circle cx="96" cy="85" r="4" />
+      </Drawn>
+      {/* sidebar lines */}
+      <Drawn len={700} delay={0.35}>
+        <line x1="70" y1="135" x2="140" y2="135" />
+        <line x1="70" y1="152" x2="170" y2="152" />
+        <line x1="70" y1="169" x2="120" y2="169" />
+        <line x1="70" y1="186" x2="160" y2="186" />
+      </Drawn>
+      {/* main block */}
+      <Drawn len={900} delay={0.5}>
+        <rect x="190" y="130" width="110" height="108" rx="2" />
+        <line x1="205" y1="152" x2="285" y2="152" />
+        <line x1="205" y1="168" x2="275" y2="168" />
+        <line x1="205" y1="184" x2="260" y2="184" />
+      </Drawn>
+      {/* gear / node */}
+      <Drawn len={700} delay={0.8}>
+        <circle cx="190" cy="310" r="38" />
+        <circle cx="190" cy="310" r="22" />
+        <line x1="190" y1="272" x2="190" y2="264" />
+        <line x1="190" y1="348" x2="190" y2="356" />
+        <line x1="152" y1="310" x2="144" y2="310" />
+        <line x1="228" y1="310" x2="236" y2="310" />
+      </Drawn>
+      {/* dimensional hints */}
+      <Drawn len={500} delay={0.6}>
+        <line x1="40" y1="50" x2="40" y2="30" strokeDasharray="2 3" />
+        <line x1="320" y1="50" x2="320" y2="30" strokeDasharray="2 3" />
+        <line x1="40" y1="34" x2="320" y2="34" />
+        <text
+          x="180"
+          y="28"
+          fontFamily="ui-monospace, monospace"
+          fontSize="9"
+          textAnchor="middle"
+          fill="currentColor"
+          stroke="none"
+          opacity="0.6"
+        >
+          v1.0
+        </text>
+      </Drawn>
+      {/* connection path */}
+      <Drawn len={800} delay={1}>
+        <path
+          d="M245 238 C 260 258, 250 285, 228 300"
+          strokeDasharray="3 3"
+        />
+      </Drawn>
+    </svg>
+  );
+
+  // ---- Value sketches (4)
+  const SketchCraft = () => (
+    <svg viewBox="0 0 80 80" {...stroke}>
+      <path d="M14 62 L52 24 L60 32 L22 70 Z" transform="translate(0,-4)" />
+      <line x1="46" y1="30" x2="54" y2="38" />
+      <path d="M58 22 L66 14 L70 18 L62 26" />
+      <circle cx="18" cy="64" r="2.5" />
+    </svg>
+  );
+
+  const SketchShip = () => (
+    <svg viewBox="0 0 80 80" {...stroke}>
+      <path d="M14 50 L40 18 L66 50" />
+      <rect x="22" y="50" width="36" height="16" />
+      <line x1="40" y1="18" x2="40" y2="8" />
+      <path d="M40 8 L54 14 L40 20 Z" />
+      <line x1="22" y1="58" x2="58" y2="58" />
+      <line x1="28" y1="50" x2="28" y2="66" />
+      <line x1="40" y1="50" x2="40" y2="66" />
+      <line x1="52" y1="50" x2="52" y2="66" />
+    </svg>
+  );
+
+  const SketchAI = () => (
+    <svg viewBox="0 0 80 80" {...stroke}>
+      <circle cx="40" cy="40" r="14" />
+      <circle cx="40" cy="40" r="22" strokeDasharray="3 3" />
+      <line x1="40" y1="18" x2="40" y2="8" />
+      <line x1="40" y1="72" x2="40" y2="62" />
+      <line x1="18" y1="40" x2="8" y2="40" />
+      <line x1="72" y1="40" x2="62" y2="40" />
+      <circle cx="40" cy="8" r="2" />
+      <circle cx="40" cy="72" r="2" />
+      <circle cx="8" cy="40" r="2" />
+      <circle cx="72" cy="40" r="2" />
+      <line x1="36" y1="36" x2="44" y2="44" />
+      <line x1="44" y1="36" x2="36" y2="44" />
+    </svg>
+  );
+
+  const SketchUser = () => (
+    <svg viewBox="0 0 80 80" {...stroke}>
+      <circle cx="40" cy="28" r="10" />
+      <path d="M18 66 C 22 50, 58 50, 62 66" />
+      <path d="M14 66 L66 66" />
+      <circle cx="60" cy="20" r="5" />
+      <line x1="60" y1="20" x2="66" y2="14" />
+    </svg>
+  );
+
+  // ---- Services capability sketches
+  const CapDesign = () => (
+    <svg viewBox="0 0 100 100" {...stroke}>
+      <rect x="14" y="18" width="72" height="50" rx="2" />
+      <line x1="14" y1="30" x2="86" y2="30" />
+      <circle cx="20" cy="24" r="1.8" />
+      <circle cx="26" cy="24" r="1.8" />
+      <rect x="22" y="38" width="22" height="22" />
+      <line x1="52" y1="40" x2="78" y2="40" />
+      <line x1="52" y1="48" x2="72" y2="48" />
+      <line x1="52" y1="56" x2="76" y2="56" />
+      <path d="M40 72 L60 72" />
+      <path d="M46 72 L46 84 M54 72 L54 84" />
+      <path d="M38 84 L62 84" />
+    </svg>
+  );
+
+  const CapEng = () => (
+    <svg viewBox="0 0 100 100" {...stroke}>
+      <path d="M30 36 L18 50 L30 64" />
+      <path d="M70 36 L82 50 L70 64" />
+      <line x1="56" y1="28" x2="44" y2="72" />
+      <rect x="10" y="18" width="80" height="64" rx="2" strokeDasharray="2 3" />
+    </svg>
+  );
+
+  const CapAI = () => (
+    <svg viewBox="0 0 100 100" {...stroke}>
+      <circle cx="30" cy="30" r="5" />
+      <circle cx="70" cy="30" r="5" />
+      <circle cx="30" cy="70" r="5" />
+      <circle cx="70" cy="70" r="5" />
+      <circle cx="50" cy="50" r="7" />
+      <line x1="34" y1="33" x2="45" y2="47" />
+      <line x1="66" y1="33" x2="55" y2="47" />
+      <line x1="34" y1="67" x2="45" y2="53" />
+      <line x1="66" y1="67" x2="55" y2="53" />
+      <line x1="30" y1="35" x2="30" y2="65" strokeDasharray="2 3" />
+      <line x1="70" y1="35" x2="70" y2="65" strokeDasharray="2 3" />
+    </svg>
+  );
+
+  const CapStrategy = () => (
+    <svg viewBox="0 0 100 100" {...stroke}>
+      <path d="M14 80 L14 20" />
+      <path d="M14 80 L90 80" />
+      <path d="M14 70 L30 60 L46 64 L64 40 L82 32" />
+      <circle cx="30" cy="60" r="2.5" />
+      <circle cx="46" cy="64" r="2.5" />
+      <circle cx="64" cy="40" r="2.5" />
+      <circle cx="82" cy="32" r="2.5" />
+      <path d="M82 32 L78 28 M82 32 L78 36" />
+    </svg>
+  );
+
+  // ---- Case-study figure (Caddy)
+  const CaddyFigure = () => (
+    <svg viewBox="0 0 360 300" {...stroke}>
+      {/* laptop/window mock */}
+      <rect x="30" y="30" width="300" height="210" rx="4" />
+      <line x1="30" y1="58" x2="330" y2="58" />
+      <circle cx="46" cy="44" r="3" />
+      <circle cx="58" cy="44" r="3" />
+      <circle cx="70" cy="44" r="3" />
+      {/* sidebar */}
+      <line x1="90" y1="58" x2="90" y2="240" />
+      <line x1="46" y1="80" x2="78" y2="80" />
+      <line x1="46" y1="94" x2="70" y2="94" />
+      <line x1="46" y1="108" x2="80" y2="108" />
+      <line x1="46" y1="130" x2="78" y2="130" />
+      <line x1="46" y1="144" x2="66" y2="144" />
+      {/* cards */}
+      <rect x="106" y="76" width="96" height="62" rx="2" />
+      <line x1="116" y1="92" x2="180" y2="92" />
+      <line x1="116" y1="104" x2="170" y2="104" />
+      <line x1="116" y1="120" x2="156" y2="120" />
+
+      <rect x="212" y="76" width="96" height="62" rx="2" />
+      <line x1="222" y1="92" x2="286" y2="92" />
+      <line x1="222" y1="104" x2="276" y2="104" />
+      <line x1="222" y1="120" x2="262" y2="120" />
+
+      <rect x="106" y="150" width="202" height="78" rx="2" />
+      <line x1="116" y1="170" x2="296" y2="170" />
+      <line x1="116" y1="184" x2="286" y2="184" />
+      <line x1="116" y1="198" x2="266" y2="198" />
+      <line x1="116" y1="212" x2="240" y2="212" />
+
+      {/* base / stand */}
+      <path d="M70 258 L290 258" />
+      <path d="M140 240 L220 240 L230 258 L130 258 Z" />
+      {/* annotation */}
+      <path d="M300 100 L340 70" strokeDasharray="2 3" />
+      <circle cx="340" cy="70" r="3" />
+      <text
+        x="320"
+        y="64"
+        fontFamily="ui-monospace, monospace"
+        fontSize="8"
+        fill="currentColor"
+        stroke="none"
+        opacity="0.6"
+      >
+        AI
+      </text>
+    </svg>
+  );
+
+  // Generic placeholder sketch for future projects
+  const PlaceholderFigure = ({ label = "TBD" }) => (
+    <svg viewBox="0 0 360 300" {...stroke}>
+      <rect x="30" y="30" width="300" height="240" rx="4" strokeDasharray="4 4" />
+      <line x1="30" y1="30" x2="330" y2="270" strokeDasharray="2 4" />
+      <line x1="330" y1="30" x2="30" y2="270" strokeDasharray="2 4" />
+      <rect x="130" y="120" width="100" height="60" fill="var(--cream)" />
+      <text
+        x="180"
+        y="156"
+        fontFamily="ui-monospace, monospace"
+        fontSize="11"
+        textAnchor="middle"
+        fill="currentColor"
+        stroke="none"
+        letterSpacing="2"
+      >
+        {label}
+      </text>
+    </svg>
+  );
+
+  // Large decorative "compass / circle" on CTA band
+  const CompassArt = () => (
+    <svg viewBox="0 0 300 300" {...stroke}>
+      <circle cx="150" cy="150" r="120" />
+      <circle cx="150" cy="150" r="90" strokeDasharray="3 4" />
+      <circle cx="150" cy="150" r="60" />
+      <line x1="150" y1="30" x2="150" y2="270" />
+      <line x1="30" y1="150" x2="270" y2="150" />
+      <line x1="66" y1="66" x2="234" y2="234" strokeDasharray="2 4" />
+      <line x1="234" y1="66" x2="66" y2="234" strokeDasharray="2 4" />
+      <circle cx="150" cy="150" r="4" fill="currentColor" />
+    </svg>
+  );
+
+  // Abstract "process" sketch (for about)
+  const ProcessFigure = () => (
+    <svg viewBox="0 0 400 260" {...stroke}>
+      <circle cx="50" cy="130" r="26" />
+      <circle cx="150" cy="80" r="22" />
+      <circle cx="250" cy="170" r="22" />
+      <circle cx="350" cy="100" r="26" />
+      <path d="M76 130 C 100 110, 120 90, 128 82" />
+      <path d="M172 80 C 200 120, 210 160, 228 170" />
+      <path d="M272 170 C 300 140, 320 115, 324 104" />
+      <text x="50" y="134" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="currentColor" stroke="none">01</text>
+      <text x="150" y="84" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="currentColor" stroke="none">02</text>
+      <text x="250" y="174" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="currentColor" stroke="none">03</text>
+      <text x="350" y="104" textAnchor="middle" fontFamily="ui-monospace,monospace" fontSize="10" fill="currentColor" stroke="none">04</text>
+      <line x1="20" y1="230" x2="380" y2="230" strokeDasharray="3 3" />
+    </svg>
+  );
+
+  // Brand mark — little "D" drafted
+  const BrandMark = () => (
+    <svg viewBox="0 0 32 32" {...stroke}>
+      {/* drafting compass — two legs meeting at a pivot, with an arc */}
+      <circle cx="16" cy="7" r="2.2" />
+      <line x1="16" y1="9.2" x2="8" y2="25" />
+      <line x1="16" y1="9.2" x2="24" y2="25" />
+      <path d="M10.5 20 A 7 7 0 0 0 21.5 20" />
+      <circle cx="8" cy="25" r="1.2" fill="currentColor" stroke="none" />
+      <circle cx="24" cy="25" r="1.2" fill="currentColor" stroke="none" />
+    </svg>
+  );
+
+  // Contact envelope
+  const ContactSketch = () => (
+    <svg viewBox="0 0 300 200" {...stroke}>
+      <rect x="30" y="40" width="240" height="140" rx="2" />
+      <path d="M30 40 L150 130 L270 40" />
+      <path d="M30 180 L110 110" />
+      <path d="M270 180 L190 110" />
+      <circle cx="240" cy="60" r="10" />
+      <path d="M230 60 L248 60 M240 52 L240 68" />
+    </svg>
+  );
+
+  Object.assign(window, {
+    HeroSketch,
+    SketchCraft,
+    SketchShip,
+    SketchAI,
+    SketchUser,
+    CapDesign,
+    CapEng,
+    CapAI,
+    CapStrategy,
+    CaddyFigure,
+    PlaceholderFigure,
+    CompassArt,
+    ProcessFigure,
+    BrandMark,
+    ContactSketch,
+  });
+})();
+
+
+/* Shared chrome: Nav, Footer, Tweaks, page wrappers */
+(function () {
+  const { useState, useEffect, useRef } = React;
+
+  const NAV = [
+    { id: "home", label: "Home" },
+    { id: "about", label: "About" },
+    { id: "projects", label: "Projects" },
+    { id: "services", label: "Services" },
+    { id: "contact", label: "Contact" },
+  ];
+
+  const Nav = ({ current, go }) => (
+    <nav className="nav">
+      <div className="nav-inner">
+        <a
+          href="#home"
+          className="brand"
+          onClick={(e) => {
+            e.preventDefault();
+            go("home");
+          }}
+        >
+          <span className="brand-mark">
+            <window.BrandMark />
+          </span>
+          <span>DevCo</span>
+        </a>
+        <div className="nav-links">
+          {NAV.map((n) => (
+            <a
+              key={n.id}
+              href={`#${n.id}`}
+              className={`nav-link ${current === n.id ? "is-active" : ""}`}
+              onClick={(e) => {
+                e.preventDefault();
+                go(n.id);
+              }}
+            >
+              {n.label}
+            </a>
+          ))}
+        </div>
+        <a
+          href="#contact"
+          className="nav-cta"
+          onClick={(e) => {
+            e.preventDefault();
+            go("contact");
+          }}
+        >
+          <span className="nav-cta-long">Start a project</span>
+          <span className="nav-cta-short">Start</span>
+        </a>
       </div>
     </nav>
+  );
 
-    <!-- Hero -->
-    <section class="hero">
-      <div class="content" id="content">
-        <h1 class="name">DevCo</h1>
-        <p class="tagline">Software, engineered.</p>
-      </div>
-      <div class="scroll-hint">
-        <a href="#about-section" aria-label="Scroll down">&#8964;</a>
-      </div>
-    </section>
+  const MarginMarks = ({ labels = ["01", "02", "03", "04", "05"] }) => (
+    <div className="margin-marks" aria-hidden="true">
+      {labels.map((l, i) => (
+        <span className="tick" key={i}>
+          {l}
+        </span>
+      ))}
+    </div>
+  );
 
-    <!-- About blurb -->
-    <section id="about-section" class="page-section section-bg">
-      <div class="page-container">
-        <p class="section-label">About</p>
-        <h2 class="section-title">We build products.</h2>
-        <div class="prose">
-          <p>DevCo is a software studio focused on designing and engineering products that solve real problems. We combine rigorous engineering with thoughtful design to ship software that people actually want to use.</p>
-          <p>We work at the intersection of product thinking and technical craft, building tools powered by AI that feel intuitive and dependable.</p>
-        </div>
-        <a href="/about.html" class="link-arrow">Learn more &rarr;</a>
-      </div>
-    </section>
-
-    <!-- Featured projects -->
-    <section class="page-section section-bg">
-      <div class="page-container">
-        <p class="section-label">Projects</p>
-        <h2 class="section-title">What we've shipped</h2>
-        <div style="display:flex;flex-direction:column;gap:1.5rem;margin-top:2rem;">
-          <a href="https://caddy.website" class="card card-full">
-            <div class="card-label">Live</div>
-            <div class="card-title">Caddy <span class="card-arrow">&rarr;</span></div>
-            <div class="card-desc">AI-powered organizational app that keeps your work and ideas structured. Designed and built from scratch at DevCo.</div>
-          </a>
-          <div class="card card-full card-muted">
-            <div class="card-label">Coming soon</div>
-            <div class="card-title">More on the way</div>
-            <div class="card-desc">New products are in development. Stay tuned.</div>
+  const Footer = ({ go }) => (
+    <footer className="footer">
+      <div className="container">
+        <div className="footer-grid">
+          <div className="footer-brand-block">
+            <div className="brand" style={{ fontSize: "1.4rem" }}>
+              <span className="brand-mark">
+                <window.BrandMark />
+              </span>
+              <span>DevCo</span>
+            </div>
+            <p>
+              A small software studio building AI-native products with
+              engineering rigor and a bias toward shipping.
+            </p>
+          </div>
+          <div className="footer-col">
+            <h4>Studio</h4>
+            <ul>
+              <li>
+                <a href="#about" onClick={(e) => { e.preventDefault(); go("about"); }}>About</a>
+              </li>
+              <li>
+                <a href="#services" onClick={(e) => { e.preventDefault(); go("services"); }}>Services</a>
+              </li>
+              <li>
+                <a href="#projects" onClick={(e) => { e.preventDefault(); go("projects"); }}>Projects</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>Contact</h4>
+            <ul>
+              <li><a href="mailto:contact@devco.website">contact@devco.website</a></li>
+              <li>
+                <a href="#contact" onClick={(e) => { e.preventDefault(); go("contact"); }}>Start a project</a>
+              </li>
+            </ul>
+          </div>
+          <div className="footer-col">
+            <h4>Index</h4>
+            <ul>
+              <li><a href="https://caddy.website" target="_blank" rel="noreferrer">Caddy ↗</a></li>
+              <li><a href="#" onClick={(e) => e.preventDefault()}>Notes (soon)</a></li>
+            </ul>
           </div>
         </div>
-        <a href="/projects.html" class="link-arrow">See all projects &rarr;</a>
-      </div>
-    </section>
-
-    <!-- CTA -->
-    <section class="page-section section-bg cta-section">
-      <div class="page-container">
-        <h2 class="cta-title">Have an idea? Let's talk.</h2>
-        <a href="/contact.html" class="cta-btn">Get in touch</a>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="footer-inner">
-        <span class="footer-brand">DevCo</span>
-        <span class="footer-email"><a href="mailto:contact@devco.website">contact@devco.website</a></span>
-        <span class="footer-copy">&copy; 2025 DevCo</span>
+        <div className="footer-bottom">
+          <span>© 2026 DevCo LLC</span>
+          <span>Software, engineered.</span>
+        </div>
       </div>
     </footer>
+  );
 
-    <script src="js/grid.js"></script>
-    <script>
-      document.querySelector('.nav-toggle').addEventListener('click', function () {
-        document.querySelector('.nav-links').classList.toggle('open');
-      });
+  const Tweaks = ({ settings, setSettings, onClose, visible }) => {
+    if (!visible) return null;
+    const set = (k, v) => setSettings((s) => ({ ...s, [k]: v }));
+    return (
+      <div className="tweaks" role="dialog" aria-label="Tweaks">
+        <div className="tweaks-head">
+          <span>Tweaks</span>
+          <button className="tweaks-close" onClick={onClose}>hide</button>
+        </div>
+        <div className="tweaks-body">
+          <div className="tweak-row">
+            <span className="lbl">Accent</span>
+            <div className="swatches">
+              {[
+                { id: "umber", color: "oklch(0.48 0.08 45)" },
+                { id: "sage", color: "oklch(0.5 0.05 145)" },
+                { id: "ink", color: "oklch(0.32 0.03 250)" },
+                { id: "brick", color: "oklch(0.45 0.09 25)" },
+              ].map((s) => (
+                <button
+                  key={s.id}
+                  className={`swatch ${settings.accent === s.id ? "active" : ""}`}
+                  style={{ background: s.color }}
+                  onClick={() => set("accent", s.id)}
+                  aria-label={s.id}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <span className="lbl">Type pairing</span>
+            <div className="opts">
+              {[
+                { id: "classic", label: "Cormorant" },
+                { id: "editorial", label: "EB Garamond" },
+                { id: "modern", label: "Instrument" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  className={settings.pairing === t.id ? "active" : ""}
+                  onClick={() => set("pairing", t.id)}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <span className="lbl">Sketches</span>
+            <div className="opts">
+              <button className={settings.sketch === "visible" ? "active" : ""} onClick={() => set("sketch", "visible")}>Shown</button>
+              <button className={settings.sketch === "hidden" ? "active" : ""} onClick={() => set("sketch", "hidden")}>Hidden</button>
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <span className="lbl">Margin marks</span>
+            <div className="opts">
+              <button className={settings.marks === "on" ? "active" : ""} onClick={() => set("marks", "on")}>On</button>
+              <button className={settings.marks === "off" ? "active" : ""} onClick={() => set("marks", "off")}>Off</button>
+            </div>
+          </div>
+
+          <div className="tweak-row">
+            <span className="lbl">Hero layout</span>
+            <div className="opts">
+              <button className={settings.hero === "split" ? "active" : ""} onClick={() => set("hero", "split")}>Split</button>
+              <button className={settings.hero === "editorial" ? "active" : ""} onClick={() => set("hero", "editorial")}>Editorial</button>
+              <button className={settings.hero === "minimal" ? "active" : ""} onClick={() => set("hero", "minimal")}>Minimal</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  Object.assign(window, { Nav, Footer, Tweaks, MarginMarks });
+})();
+
+
+/* Home + About pages */
+(function () {
+  const { useState } = React;
+
+  const Arrow = () => (
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="2" y1="7" x2="12" y2="7" />
+      <polyline points="8,3 12,7 8,11" />
+    </svg>
+  );
+
+  // ---------- HOME ----------
+  const Home = ({ go, settings }) => (
+    <>
+      <section className="hero">
+        <window.MarginMarks labels={["A", "B", "C", "D"]} />
+        <div className="container">
+          <div className={`hero-grid ${settings.hero}`}>
+            <div className="hero-left">
+              <div className="hero-meta kicker fade-up">
+                <span className="dot" />
+                <span>Studio · Est. 2025</span>
+                <span style={{ color: "var(--charcoal-4)" }}>—</span>
+                <span>Brooklyn / Remote</span>
+              </div>
+              <h1 className="fade-up d1">
+                Software,<br />
+                <em>engineered.</em>
+              </h1>
+              <p className="hero-tag fade-up d2">
+                DevCo is a small studio designing and building AI-native
+                products from the ground up — with craft, rigor, and a bias
+                toward shipping.
+              </p>
+              <div className="hero-footer fade-up d3">
+                <a href="#projects" className="btn-primary" onClick={(e) => { e.preventDefault(); go("projects"); }}>
+                  See the work <Arrow />
+                </a>
+                <a href="#contact" className="btn-ghost" onClick={(e) => { e.preventDefault(); go("contact"); }}>
+                  Start a project
+                </a>
+              </div>
+            </div>
+            {settings.hero !== "minimal" && (
+              <div className="hero-right">
+                <div className="hero-sketch-wrap fade-up d2">
+                  <window.HeroSketch />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      {/* What we do / summary */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col">
+              <span className="kicker">§ 01 — Studio</span>
+            </div>
+            <h2>
+              A studio for building <em>products that matter</em>, not clients
+              to juggle.
+            </h2>
+          </div>
+          <div className="split">
+            <div className="prose">
+              <p>
+                DevCo operates as a focused studio, not an agency. Every
+                project gets our full attention — tighter feedback loops,
+                higher quality, and software that ships on time.
+              </p>
+              <p>
+                We work at the intersection of product thinking and technical
+                craft, building tools powered by AI that feel intuitive and
+                dependable.
+              </p>
+              <a
+                href="#about"
+                className="btn-ghost"
+                style={{ marginTop: "1.5rem" }}
+                onClick={(e) => { e.preventDefault(); go("about"); }}
+              >
+                About the studio <Arrow />
+              </a>
+            </div>
+            <div className="split-figure">
+              <window.ProcessFigure />
+              <span className="split-caption">fig. 01 — our process</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured work */}
+      <section className="section alt">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col">
+              <span className="kicker">§ 02 — Index of work</span>
+            </div>
+            <h2>
+              What we've <em>shipped</em>, and what's on the bench.
+            </h2>
+          </div>
+          <div className="work-list">
+            <a href="https://caddy.website" target="_blank" rel="noreferrer" className="work-row live">
+              <span className="idx">№ 01</span>
+              <span className="title">Caddy</span>
+              <span className="desc">
+                AI-powered organizational app that keeps your work and ideas
+                structured. Designed and built end-to-end.
+              </span>
+              <span className="status">
+                <span className="pip" />
+                Live · 2025
+              </span>
+              <span className="arrow"><Arrow /></span>
+            </a>
+            <div className="work-row">
+              <span className="idx">№ 02</span>
+              <span className="title" style={{ color: "var(--charcoal-3)" }}>Untitled</span>
+              <span className="desc">
+                New product in early development. Reach out if you'd like a
+                peek.
+              </span>
+              <span className="status"><span className="pip" />In development</span>
+              <span className="arrow">—</span>
+            </div>
+            <div className="work-row">
+              <span className="idx">№ 03</span>
+              <span className="title" style={{ color: "var(--charcoal-3)" }}>More on the way</span>
+              <span className="desc">
+                We prototype constantly. If you have a concept you want to
+                build, get in touch.
+              </span>
+              <span className="status"><span className="pip" />Sketching</span>
+              <span className="arrow">—</span>
+            </div>
+          </div>
+          <div style={{ marginTop: "2rem" }}>
+            <a href="#projects" className="btn-ghost" onClick={(e) => { e.preventDefault(); go("projects"); }}>
+              All projects <Arrow />
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Values */}
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col">
+              <span className="kicker">§ 03 — Principles</span>
+            </div>
+            <h2>What drives the work.</h2>
+          </div>
+          <div className="values">
+            <div className="value">
+              <span className="value-num">01</span>
+              <div className="value-sketch"><window.SketchCraft /></div>
+              <div>
+                <div className="value-title">Craft over convention.</div>
+                <div className="value-desc">
+                  We don't follow templates. Every product is shaped by its
+                  unique constraints and the people who will use it.
+                </div>
+              </div>
+            </div>
+            <div className="value">
+              <span className="value-num">02</span>
+              <div className="value-sketch"><window.SketchShip /></div>
+              <div>
+                <div className="value-title">Ship and iterate.</div>
+                <div className="value-desc">
+                  Getting real software into real hands quickly, then
+                  improving it based on what we learn.
+                </div>
+              </div>
+            </div>
+            <div className="value">
+              <span className="value-num">03</span>
+              <div className="value-sketch"><window.SketchAI /></div>
+              <div>
+                <div className="value-title">AI-native thinking.</div>
+                <div className="value-desc">
+                  Built with AI as a first-class capability — not bolted on,
+                  but woven into the product from day one.
+                </div>
+              </div>
+            </div>
+            <div className="value">
+              <span className="value-num">04</span>
+              <div className="value-sketch"><window.SketchUser /></div>
+              <div>
+                <div className="value-title">User obsession.</div>
+                <div className="value-desc">
+                  The best architecture means nothing if the product doesn't
+                  solve a real problem elegantly.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <CtaBand go={go} />
+    </>
+  );
+
+  // ---------- ABOUT ----------
+  const About = ({ go }) => (
+    <>
+      <section className="page-head">
+        <window.MarginMarks labels={["A1", "A2", "A3"]} />
+        <div className="container">
+          <div className="page-head-grid">
+            <div>
+              <span className="kicker">Chapter I · About</span>
+              <h1 style={{ marginTop: "1rem" }}>
+                A studio built on <em>craft</em>, engineering rigor, and
+                products that matter.
+              </h1>
+            </div>
+            <p className="sub">
+              DevCo is a software studio — small by design, rigorous by
+              discipline, and shipping AI-native products from the ground up.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="story">
+            <div className="story-aside">
+              <div className="story-label">File: 01 — Story</div>
+              <div className="story-stats">
+                <div className="stat"><div className="k">Founded</div><div className="v">2025</div></div>
+                <div className="stat"><div className="k">Based</div><div className="v"><em>Brooklyn</em></div></div>
+                <div className="stat"><div className="k">Products shipped</div><div className="v">1<span style={{color:"var(--charcoal-3)", fontSize:"1rem"}}> · live</span></div></div>
+                <div className="stat"><div className="k">In pipeline</div><div className="v">2<span style={{color:"var(--charcoal-3)", fontSize:"1rem"}}> · active</span></div></div>
+              </div>
+              <div className="split-figure" style={{ marginTop: "2rem", aspectRatio: "1/1" }}>
+                <window.ProcessFigure />
+                <span className="split-caption">fig. 02 — engagement arc</span>
+              </div>
+            </div>
+            <div className="story-prose">
+              <p>
+                DevCo was founded on a simple belief: the best software comes
+                from teams that care deeply about both the engineering and
+                the experience. We don't separate "design" from
+                "development" — every line of code is a design decision.
+              </p>
+              <p>
+                We build products from the ground up — from initial concept
+                through architecture, design, implementation, and launch. Our
+                work is driven by a commitment to quality, clarity, and the
+                conviction that great tools should feel invisible.
+              </p>
+              <p>
+                In an era where AI is reshaping every industry, we build with
+                it natively — not as an afterthought, but as a core part of
+                how we think, design, and ship.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col"><span className="kicker">§ 02 — Principles</span></div>
+            <h2>What drives the work.</h2>
+          </div>
+          <div className="values">
+            <div className="value"><span className="value-num">01</span><div className="value-sketch"><window.SketchCraft /></div><div><div className="value-title">Craft over convention.</div><div className="value-desc">Every product is shaped by its unique constraints and the people who will use it — not by templates.</div></div></div>
+            <div className="value"><span className="value-num">02</span><div className="value-sketch"><window.SketchShip /></div><div><div className="value-title">Ship and iterate.</div><div className="value-desc">Get real software into real hands quickly, then improve it based on what we learn.</div></div></div>
+            <div className="value"><span className="value-num">03</span><div className="value-sketch"><window.SketchAI /></div><div><div className="value-title">AI-native thinking.</div><div className="value-desc">Built with AI as a first-class capability — woven into the product from day one.</div></div></div>
+            <div className="value"><span className="value-num">04</span><div className="value-sketch"><window.SketchUser /></div><div><div className="value-title">User obsession.</div><div className="value-desc">The best architecture means nothing if the product doesn't solve a real problem elegantly.</div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <CtaBand go={go} />
+    </>
+  );
+
+  const CtaBand = ({ go }) => (
+    <section className="cta-band">
+      <div className="cta-band-art"><window.CompassArt /></div>
+      <div className="container">
+        <div className="cta-band-row">
+          <div>
+            <span className="kicker">Next steps</span>
+            <h2>Have an idea? <em>Let's talk.</em></h2>
+          </div>
+          <a href="#contact" className="btn-primary" onClick={(e) => { e.preventDefault(); go("contact"); }}>
+            Get in touch <Arrow />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+
+  Object.assign(window, { Home, About, CtaBand, Arrow });
+})();
+
+
+/* Services, Projects, Contact pages */
+(function () {
+  const { useState } = React;
+
+  // ---------- SERVICES ----------
+  const Services = ({ go }) => (
+    <>
+      <section className="page-head">
+        <window.MarginMarks labels={["S1", "S2", "S3"]} />
+        <div className="container">
+          <div className="page-head-grid">
+            <div>
+              <span className="kicker">Chapter II · Services</span>
+              <h1 style={{ marginTop: "1rem" }}>
+                What we <em>do</em>, and how we do it.
+              </h1>
+            </div>
+            <p className="sub">
+              Product design and engineering for the AI era — end-to-end,
+              from first sketch to shipping software.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col"><span className="kicker">§ 01 — Capabilities</span></div>
+            <h2>Four practices, one studio.</h2>
+          </div>
+          <div className="caps">
+            <div className="cap">
+              <div className="cap-head">
+                <span className="cap-num">01 / 04</span>
+                <div className="cap-sketch"><window.CapDesign /></div>
+              </div>
+              <div>
+                <div className="cap-title">Product Design</div>
+                <div className="cap-desc">
+                  End-to-end product design from research and wireframes
+                  through high-fidelity UI and interaction design. Every
+                  surface considered.
+                </div>
+              </div>
+              <div className="cap-tags">
+                <span className="cap-tag">Research</span>
+                <span className="cap-tag">UX</span>
+                <span className="cap-tag">UI</span>
+                <span className="cap-tag">Prototyping</span>
+              </div>
+            </div>
+            <div className="cap">
+              <div className="cap-head">
+                <span className="cap-num">02 / 04</span>
+                <div className="cap-sketch"><window.CapEng /></div>
+              </div>
+              <div>
+                <div className="cap-title">Software Engineering</div>
+                <div className="cap-desc">
+                  Full-stack development with modern tools and frameworks.
+                  Clean architecture, tested code, reliable deployments.
+                </div>
+              </div>
+              <div className="cap-tags">
+                <span className="cap-tag">TypeScript</span>
+                <span className="cap-tag">React</span>
+                <span className="cap-tag">APIs</span>
+                <span className="cap-tag">Infra</span>
+              </div>
+            </div>
+            <div className="cap">
+              <div className="cap-head">
+                <span className="cap-num">03 / 04</span>
+                <div className="cap-sketch"><window.CapAI /></div>
+              </div>
+              <div>
+                <div className="cap-title">AI Integration</div>
+                <div className="cap-desc">
+                  Native AI capabilities built into products — LLM-powered
+                  features, intelligent automation, and data pipelines that
+                  hold up in production.
+                </div>
+              </div>
+              <div className="cap-tags">
+                <span className="cap-tag">LLMs</span>
+                <span className="cap-tag">RAG</span>
+                <span className="cap-tag">Agents</span>
+                <span className="cap-tag">Evals</span>
+              </div>
+            </div>
+            <div className="cap">
+              <div className="cap-head">
+                <span className="cap-num">04 / 04</span>
+                <div className="cap-sketch"><window.CapStrategy /></div>
+              </div>
+              <div>
+                <div className="cap-title">Product Strategy</div>
+                <div className="cap-desc">
+                  From concept validation to roadmap planning. We help
+                  define what to build, why it matters, and how to ship it.
+                </div>
+              </div>
+              <div className="cap-tags">
+                <span className="cap-tag">Discovery</span>
+                <span className="cap-tag">Roadmap</span>
+                <span className="cap-tag">Positioning</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col"><span className="kicker">§ 02 — Approach</span></div>
+            <h2>How we work.</h2>
+          </div>
+          <div className="process">
+            <div className="step">
+              <span className="step-num">01 · Understand</span>
+              <div className="step-title">Frame the problem.</div>
+              <div className="step-desc">
+                Days of listening, reading, and asking. Before we design
+                anything, we name the real problem and the user behind it.
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-num">02 · Prototype</span>
+              <div className="step-title">Sketch in code.</div>
+              <div className="step-desc">
+                Low-fi mocks and real prototypes in hours, not weeks.
+                Assumptions become testable artifacts fast.
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-num">03 · Build</span>
+              <div className="step-title">Ship with care.</div>
+              <div className="step-desc">
+                Clean architecture, tests where they matter, and a
+                production deploy you can actually put in front of users.
+              </div>
+            </div>
+            <div className="step">
+              <span className="step-num">04 · Iterate</span>
+              <div className="step-title">Learn and refine.</div>
+              <div className="step-desc">
+                Real usage reveals what matters. We stay close to the
+                product until it's sharp, then hand it off clean.
+              </div>
+            </div>
+          </div>
+
+          <div style={{ marginTop: "4rem" }} className="prose">
+            <p>
+              We operate as a focused studio, not an agency — we don't
+              juggle dozens of clients. Every engagement is treated like
+              we're building our own product.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <window.CtaBand go={go} />
+    </>
+  );
+
+  // ---------- PROJECTS ----------
+  const Projects = ({ go }) => (
+    <>
+      <section className="page-head">
+        <window.MarginMarks labels={["P1", "P2", "P3"]} />
+        <div className="container">
+          <div className="page-head-grid">
+            <div>
+              <span className="kicker">Chapter III · Projects</span>
+              <h1 style={{ marginTop: "1rem" }}>
+                Software we've <em>designed</em>, built, and shipped.
+              </h1>
+            </div>
+            <p className="sub">
+              A small, growing catalog of products — each one taken from
+              concept through architecture, UI, and launch.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="section">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col"><span className="kicker">§ Featured</span></div>
+            <h2>Currently <em>live</em>.</h2>
+          </div>
+
+          <a href="https://caddy.website" target="_blank" rel="noreferrer" className="case">
+            <div className="case-figure">
+              <span className="fig-corner tl"></span>
+              <span className="fig-corner tr"></span>
+              <span className="fig-corner bl"></span>
+              <span className="fig-corner br"></span>
+              <span className="fig-caption">fig. 01 — caddy · product view</span>
+              <window.CaddyFigure />
+            </div>
+            <div className="case-body">
+              <div className="case-meta">
+                <span>№ 01 · AI Productivity</span>
+                <span className="live"><span className="pip" /> Live</span>
+              </div>
+              <div className="case-title">Caddy</div>
+              <div className="case-desc">
+                An AI-powered organizational app that keeps your work and
+                ideas structured. Designed and built from scratch at DevCo
+                — from concept through architecture, UI design, and launch.
+              </div>
+              <div className="case-specs">
+                <div><div className="k">Role</div><div className="v">Design + Build</div></div>
+                <div><div className="k">Year</div><div className="v">2025</div></div>
+                <div><div className="k">Status</div><div className="v"><em>Live</em></div></div>
+              </div>
+              <div style={{ marginTop: "1rem" }}>
+                <span className="btn-ghost">Visit caddy.website <window.Arrow /></span>
+              </div>
+            </div>
+          </a>
+        </div>
+      </section>
+
+      <section className="section alt">
+        <div className="container">
+          <div className="section-head">
+            <div className="kicker-col"><span className="kicker">§ In development</span></div>
+            <h2>On the bench.</h2>
+          </div>
+
+          <div className="case">
+            <div className="case-figure">
+              <span className="fig-corner tl"></span>
+              <span className="fig-corner tr"></span>
+              <span className="fig-corner bl"></span>
+              <span className="fig-corner br"></span>
+              <span className="fig-caption">fig. 02 — redacted</span>
+              <window.PlaceholderFigure label="TBA" />
+            </div>
+            <div className="case-body">
+              <div className="case-meta">
+                <span>№ 02 · Untitled</span>
+                <span>In development</span>
+              </div>
+              <div className="case-title" style={{ color: "var(--charcoal-2)" }}>New product</div>
+              <div className="case-desc">
+                Something new is taking shape. Details coming soon — if
+                you'd like a preview, get in touch.
+              </div>
+              <div className="case-specs">
+                <div><div className="k">Role</div><div className="v">Design + Build</div></div>
+                <div><div className="k">Target</div><div className="v">2026</div></div>
+                <div><div className="k">Status</div><div className="v"><em>In dev</em></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div className="case">
+            <div className="case-figure">
+              <span className="fig-corner tl"></span>
+              <span className="fig-corner tr"></span>
+              <span className="fig-corner bl"></span>
+              <span className="fig-corner br"></span>
+              <span className="fig-caption">fig. 03 — exploratory</span>
+              <window.PlaceholderFigure label="SKETCH" />
+            </div>
+            <div className="case-body">
+              <div className="case-meta">
+                <span>№ 03 · Explorations</span>
+                <span>Sketching</span>
+              </div>
+              <div className="case-title" style={{ color: "var(--charcoal-2)" }}>More ideas in the pipeline</div>
+              <div className="case-desc">
+                We're always prototyping. If you have a concept you want
+                built, get in touch — some of our best work starts as
+                someone else's half-formed idea.
+              </div>
+              <div className="case-specs">
+                <div><div className="k">Role</div><div className="v">TBD</div></div>
+                <div><div className="k">Target</div><div className="v">—</div></div>
+                <div><div className="k">Status</div><div className="v"><em>Exploring</em></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <window.CtaBand go={go} />
+    </>
+  );
+
+  // ---------- CONTACT ----------
+  const Contact = ({ go }) => {
+    const [sent, setSent] = useState(false);
+    const [form, setForm] = useState({ name: "", email: "", project: "design", message: "" });
+    const up = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+    const submit = (e) => {
+      e.preventDefault();
+      const projectLabels = {
+        design: "Product design",
+        eng: "Software engineering",
+        ai: "AI integration",
+        strategy: "Product strategy",
+        other: "Something else"
+      };
+      const subject = `Project inquiry from ${form.name}`;
+      const body = [
+        `Name: ${form.name}`,
+        `Email: ${form.email}`,
+        `Project type: ${projectLabels[form.project] || form.project}`,
+        "",
+        form.message
+      ].join("\n");
+      window.location.href = `mailto:contact@devco.website?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setSent(true);
+    };
+    return (
+      <>
+        <section className="page-head">
+          <window.MarginMarks labels={["C1", "C2"]} />
+          <div className="container">
+            <div className="page-head-grid">
+              <div>
+                <span className="kicker">Chapter IV · Contact</span>
+                <h1 style={{ marginTop: "1rem" }}>
+                  Let's <em>talk</em>.
+                </h1>
+              </div>
+              <p className="sub">
+                Have a project in mind, or just want to say hello? Drop us
+                a line — we typically respond within 24 hours.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="container">
+            <div className="contact">
+              <div>
+                <span className="kicker">Form · 01</span>
+                <h2 className="display h3" style={{ marginTop: "0.75rem", marginBottom: "1.5rem" }}>
+                  Tell us about your project.
+                </h2>
+                {sent ? (
+                  <div className="contact-success">
+                    Your email draft should be open now. If it did not launch,
+                    email us directly at contact@devco.website.
+                    <div style={{ marginTop: "1rem" }}>
+                      <button className="btn-ghost" onClick={() => { setSent(false); setForm({ name:"", email:"", project:"design", message:"" }); }}>
+                        Send another <window.Arrow />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  <form className="contact-form" onSubmit={submit}>
+                    <div className="field">
+                      <label>Name</label>
+                      <input required value={form.name} onChange={up("name")} placeholder="Your name" />
+                    </div>
+                    <div className="field">
+                      <label>Email</label>
+                      <input required type="email" value={form.email} onChange={up("email")} placeholder="you@domain.com" />
+                    </div>
+                    <div className="field">
+                      <label>Type of project</label>
+                      <select value={form.project} onChange={up("project")}>
+                        <option value="design">Product design</option>
+                        <option value="eng">Software engineering</option>
+                        <option value="ai">AI integration</option>
+                        <option value="strategy">Product strategy</option>
+                        <option value="other">Something else</option>
+                      </select>
+                    </div>
+                    <div className="field">
+                      <label>Message</label>
+                      <textarea required value={form.message} onChange={up("message")} placeholder="A few sentences about what you're building…" />
+                    </div>
+                    <button type="submit" className="btn-primary" style={{ alignSelf: "flex-start" }}>
+                      Send <window.Arrow />
+                    </button>
+                  </form>
+                )}
+              </div>
+              <aside className="contact-aside">
+                <div className="split-figure" style={{ aspectRatio: "3/2", marginBottom: "2rem" }}>
+                  <window.ContactSketch />
+                  <span className="split-caption">fig. 01 — inbox</span>
+                </div>
+                <span className="kicker">Or email us directly</span>
+                <div style={{ marginTop: "0.75rem" }}>
+                  <a className="contact-email" href="mailto:contact@devco.website">contact@devco.website</a>
+                </div>
+                <div className="contact-bits">
+                  <div className="contact-bit"><div className="k">Response time</div><div className="v">Within 24 hours, most days.</div></div>
+                  <div className="contact-bit"><div className="k">Timezone</div><div className="v">ET · Brooklyn, NY</div></div>
+                  <div className="contact-bit"><div className="k">Availability</div><div className="v">Taking one new engagement for 2026.</div></div>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </>
+    );
+  };
+
+  Object.assign(window, { Services, Projects, Contact });
+})();
+
+
+
+/* ===== App init ===== */
+(function(){
+  const { useState, useEffect } = React;
+  const PAGES = new Set(["home", "about", "services", "projects", "contact"]);
+  const PATH_TO_PAGE = {
+    "/": "home",
+    "/index.html": "home",
+    "/about": "about",
+    "/about.html": "about",
+    "/services": "services",
+    "/services.html": "services",
+    "/projects": "projects",
+    "/projects.html": "projects",
+    "/contact": "contact",
+    "/contact.html": "contact"
+  };
+
+  const storedPage = () => {
+    try {
+      const page = localStorage.getItem("devco_page");
+      return PAGES.has(page) ? page : "home";
+    } catch (_) {
+      return "home";
+    }
+  };
+
+  const pageFromLocation = () => {
+    const hashPage = window.location.hash.replace(/^#\/?/, "");
+    if (PAGES.has(hashPage)) return hashPage;
+    return PATH_TO_PAGE[window.location.pathname] || storedPage();
+  };
+
+  const pageUrl = (id) => id === "home" ? "/" : `#${id}`;
+
+  const DEFAULTS = /*EDITMODE-BEGIN*/{
+    "accent": "ink",
+    "pairing": "classic",
+    "sketch": "visible",
+    "marks": "on",
+    "hero": "split"
+  }/*EDITMODE-END*/;
+
+  function App() {
+    const [page, setPage] = useState(pageFromLocation);
+    const [settings, setSettings] = useState(DEFAULTS);
+    const [tweaksVisible, setTweaksVisible] = useState(false);
+
+    const go = (id) => {
+      const next = PAGES.has(id) ? id : "home";
+      setPage(next);
+      try {
+        localStorage.setItem("devco_page", next);
+      } catch (_) {}
+      const nextUrl = pageUrl(next);
+      const isCurrentUrl = next === "home"
+        ? window.location.pathname === "/" && !window.location.hash
+        : window.location.hash === `#${next}`;
+      if (!isCurrentUrl) {
+        window.history.pushState(null, "", nextUrl);
+      }
+      window.scrollTo({ top: 0, behavior: "auto" });
+    };
+
+    useEffect(() => {
+      const syncRoute = () => setPage(pageFromLocation());
+      window.addEventListener("popstate", syncRoute);
+      window.addEventListener("hashchange", syncRoute);
+      return () => {
+        window.removeEventListener("popstate", syncRoute);
+        window.removeEventListener("hashchange", syncRoute);
+      };
+    }, []);
+
+    useEffect(() => {
+      const onMsg = (e) => {
+        const d = e.data || {};
+        if (d.type === "__activate_edit_mode") setTweaksVisible(true);
+        if (d.type === "__deactivate_edit_mode") setTweaksVisible(false);
+      };
+      window.addEventListener("message", onMsg);
+      window.parent.postMessage({ type: "__edit_mode_available" }, "*");
+      return () => window.removeEventListener("message", onMsg);
+    }, []);
+
+    useEffect(() => {
+      window.parent.postMessage({ type: "__edit_mode_set_keys", edits: settings }, "*");
+    }, [settings]);
+
+    useEffect(() => {
+      const root = document.documentElement;
+      root.dataset.accent = settings.accent;
+      root.dataset.pairing = settings.pairing;
+      root.dataset.sketch = settings.sketch;
+      root.dataset.marks = settings.marks;
+    }, [settings]);
+
+    const pageMap = {
+      home: <window.Home go={go} settings={settings} />,
+      about: <window.About go={go} />,
+      services: <window.Services go={go} />,
+      projects: <window.Projects go={go} />,
+      contact: <window.Contact go={go} />
+    };
+
+    return (
+      <div className="shell" data-screen-label={page} key={page}>
+        <window.Nav current={page} go={go} />
+        <main style={{ flex: 1 }}>{pageMap[page]}</main>
+        <window.Footer go={go} />
+        <window.Tweaks
+          visible={tweaksVisible}
+          settings={settings}
+          setSettings={setSettings}
+          onClose={() => setTweaksVisible(false)}
+        />
+      </div>
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+})();
+
     </script>
   </body>
 </html>
